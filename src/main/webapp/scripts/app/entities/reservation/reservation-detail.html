@@ -1,0 +1,78 @@
+
+<div>
+    <h2><span>Reservation</span> {{reservation.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Field</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span>StartDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{reservation.startDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>EndDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{reservation.endDate | date:'mediumDate'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Project</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{reservation.project}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Status</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{reservation.status}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>requestor</span>
+                </td>
+                <td>
+                    {{reservation.requestor.login}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>appl</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="appl.detail({id:reservation.appl.id})">{{reservation.appl.applName}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>environment</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="environment.detail({id:reservation.environment.id})">{{reservation.environment.environmentDescription}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span> Back</span>
+    </button>
+</div>

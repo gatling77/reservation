@@ -1,0 +1,30 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "compatibleEnvironments",
+            "otherEntityName": "environment",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "environmentName",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "applName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "3",
+            "fieldValidateRulesMaxlength": "40"
+        }
+    ],
+    "changelogDate": "20160130172544",
+    "dto": "no",
+    "service": "no",
+    "pagination": "pager"
+}

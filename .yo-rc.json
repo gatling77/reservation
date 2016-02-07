@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "EnvironmentReservation",
+    "packageName": "ch.corner.envres",
+    "packageFolder": "ch/corner/envres",
+    "authenticationType": "session",
+    "hibernateCache": "no",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": false,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "8510d02e4a542e45ddfd87456f7549cfe14a6e8c",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

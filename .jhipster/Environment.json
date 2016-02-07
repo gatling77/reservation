@@ -1,0 +1,29 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "level",
+            "otherEntityName": "dTAP",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "levelName"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "environmentName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "3",
+            "fieldValidateRulesMaxlength": 20
+        }
+    ],
+    "changelogDate": "20160130171940",
+    "dto": "no",
+    "service": "no",
+    "pagination": "pager"
+}

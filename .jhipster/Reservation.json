@@ -1,0 +1,67 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "requestor",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "appl",
+            "otherEntityName": "appl",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "applName"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "environment",
+            "otherEntityName": "environment",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "environmentDescription"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "project",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": "3",
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "status",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160131150140",
+    "dto": "no",
+    "service": "serviceClass",
+    "pagination": "pager"
+}
