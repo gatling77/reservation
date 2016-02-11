@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('environmentreservationApp')
-    .controller('ReservationController', function ($scope, $state, Reservation, ReservationSearch, ParseLinks) {
+    .controller('ReservationController', function ($scope, $state, Reservation, ReservationSearch, ParseLinks, AlertService) {
 
         $scope.reservations = [];
         $scope.predicate = 'id';
@@ -20,6 +20,17 @@ angular.module('environmentreservationApp')
         };
         $scope.loadAll();
 
+        $scope.confirm = function(id){
+            Reservation.confirm({id:id},{}, onSuccess);
+        }
+
+        $scope.close = function(id){
+            Reservation.close({id:id},{}, onSuccess);
+        }
+
+        function onSuccess(result){
+        $scope.loadAll();
+        }
 
         $scope.search = function () {
             ReservationSearch.query({query: $scope.searchQuery}, function(result) {

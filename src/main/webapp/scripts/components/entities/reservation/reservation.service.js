@@ -4,6 +4,14 @@ angular.module('environmentreservationApp')
     .factory('Reservation', function ($resource, DateUtils) {
         return $resource('api/reservations/:id', {}, {
             'query': { method: 'GET', isArray: true},
+            'confirm':{
+                method: 'PUT',
+                url: 'api/reservations/:id/confirm'
+            },
+            'close':{
+                method: 'PUT',
+                url: 'api/reservations/:id/close'
+            },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

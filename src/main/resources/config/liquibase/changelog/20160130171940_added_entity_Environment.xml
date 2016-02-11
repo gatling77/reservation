@@ -24,16 +24,16 @@
             <column name="environment_name" type="varchar(20)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="level_id" type="bigint"/>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
-        
+
         <addForeignKeyConstraint baseColumnNames="level_id"
                                  baseTableName="environment"
                                  constraintName="fk_environment_level_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="d_tap"/>
+                                 referencedTableName="d tap"/>
 
     </changeSet>
 </databaseChangeLog>

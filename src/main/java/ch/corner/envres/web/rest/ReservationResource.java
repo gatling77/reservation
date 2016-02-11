@@ -23,6 +23,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * REST controller for managing Reservation.
@@ -36,6 +37,13 @@ public class ReservationResource {
     @Inject
     private ReservationService reservationService;
 
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<Void> handleIllegalState(){
+        return ResponseEntity.badRequest().headers(
+            HeaderUtil.createFailureAlert("resource","illegalState", "Action not allowed")
+        ).build();
+    }
 
 
     /**
@@ -92,6 +100,34 @@ public class ReservationResource {
                 .headers(HeaderUtil.createWarning("Reservation conflicts with other reservations",""+e.getClashingReservations().size()))
                 .body(result);
         }
+    }
+
+    @RequestMapping(value = "/reservations/{id}/close",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Reservation> close(@PathVariable Long id) {
+        log.debug("REST request to confirm Reservation : {}", id);
+        Reservation reservation = reservationService.findOne(id);
+        return changeStatus(reservation,reservationService::close);
+    }
+
+
+    @RequestMapping(value = "/reservations/{id}/confirm",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Reservation> confirm(@PathVariable Long id) {
+        log.debug("REST request to confirm Reservation : {}", id);
+        Reservation reservation = reservationService.findOne(id);
+        return changeStatus(reservation,reservationService::confirm);
+    }
+
+
+    private ResponseEntity<Reservation> changeStatus(Reservation reservation, Function<Reservation,Reservation> fun){
+        return Optional.ofNullable(reservation)
+            .map(res -> new ResponseEntity<>(fun.apply(res),HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**

@@ -45,7 +45,7 @@ public class Reservation implements Serializable {
     }
 
     private static final TransitionManager TRANSITION_MANAGER = new TransitionManager();
-    public static final String STATUS_NEW = "NEW";
+    public static final String STATUS_NEW = null;
     public static final String STATUS_CLOSED = "CLOSED";
     public static final String STATUS_CONFLICT = "CONFLICT";
     public static final String STATUS_CONFIRMED = "CONFIRMED";

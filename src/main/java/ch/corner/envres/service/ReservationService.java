@@ -32,10 +32,21 @@ public class ReservationService {
     @Inject
     private ReservationSearchRepository reservationSearchRepository;
 
-    /**
-     * Save a reservation.
-     * @return the persisted entity
-     */
+
+    public Reservation confirm(Reservation reservation) {
+        reservation.confirm();
+        return reservationRepository.save(reservation);
+    }
+
+    public Reservation close(Reservation reservation) {
+        reservation.close();
+        return reservationRepository.save(reservation);
+    }
+
+        /**
+         * Save a reservation.
+         * @return the persisted entity
+         */
     public Reservation save(Reservation reservation) throws ClashingReservationException {
         log.debug("Request to save Reservation : {}", reservation);
         List<Reservation> clashingReservation = findClashingReservations(reservation);
