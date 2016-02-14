@@ -39,6 +39,7 @@
                     <th jh-sort-by="appl.applName"><span>appl</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th jh-sort-by="environment.environmentDescription"><span>environment</span> <span class="glyphicon glyphicon-sort"></span></th>
                     <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +48,7 @@
                         <td>{{reservation.startDate | date:'mediumDate'}}</td>
                         <td>{{reservation.endDate | date:'mediumDate'}}</td>
                     <td>{{reservation.project}}</td>
-                    <td>{{reservation.status}}</td>
+                    <td><rsrv-status reservation="reservation"></rsrv-status></td>
                     <td>
                         {{reservation.requestor.login}}
                     </td>
@@ -57,38 +58,30 @@
                     <td>
                         <a ui-sref="environment.detail({id:reservation.environment.id})">{{reservation.environment.environmentDescription}}</a>
                     </td>
+                    <td> <rsrv-status-command reservation="reservation"></rsrv-status-command></td>
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ng-click="confirm(reservation.id)"
-                                    class="btn btn-success btn-sm">
-                                <span class="glyphicon glyphicon-ok"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ng-click="close(reservation.id)"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                        </div>
-
-                        <div class="btn-group flex-btn-group-container">
-                                <button type="submit"
-                                    ui-sref="reservation.detail({id:reservation.id})"
-                                    class="btn btn-info btn-xs">
+                                    ng-click="getClashing(reservation)"
+                                    class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
+                                    ui-sref="reservation.detail({id:reservation.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm"></span>
+                            </button>
+                            <button type="submit" ng-show="reservation.editAllowed"
                                     ui-sref="reservation.edit({id:reservation.id})"
-                                    class="btn btn-primary btn-xs">
+                                    class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>
                             <button type="submit"
                                     ui-sref="reservation.delete({id:reservation.id})"
-                                    class="btn btn-danger btn-xs">
+                                    class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-trash "></span>
                                 <span class="hidden-xs hidden-sm"></span>
                             </button>

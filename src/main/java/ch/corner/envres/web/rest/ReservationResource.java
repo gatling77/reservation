@@ -162,6 +162,27 @@ public class ReservationResource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+
+    /**
+     * GET  /reservations/:id -> get the "id" reservation.
+     */
+    @RequestMapping(value = "/reservations/{id}/clashing",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Reservation>> getClashingReservations(@PathVariable Long id) {
+        log.debug("REST request to get Reservation clashing : {}", id);
+
+        Reservation reservation = reservationService.findOne(id);
+
+        return Optional.ofNullable(reservation)
+            .map(result -> new ResponseEntity<>(
+                reservationService.findClashingReservations(reservation),
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
     /**
      * DELETE  /reservations/:id -> delete the "id" reservation.
      */

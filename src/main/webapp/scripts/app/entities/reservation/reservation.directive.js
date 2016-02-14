@@ -2,46 +2,76 @@
 
 angular.module('environmentreservationApp')
 .directive('rsrvStatusCommand',
-    function(Reservation){
+    function(){
         return{
             restrict:'E',
             template:'<div class="btn-group flex-btn-group-container">'+
-                                                  ' <button type="submit"'+
-                                                          ' ng-click="ctrl.confirm(reservation.id)"'+
+                                                  ' <button ng-show="ctrl.canConfirm()" type="submit"'+
+                                                          ' ng-click="ctrl.confirm()"'+
                                                           ' class="btn btn-success btn-sm">'+
                                                       ' <span class="glyphicon glyphicon-ok"></span>'+
                                                       ' <span class="hidden-xs hidden-sm"></span>'+
                                                   ' </button>'+
-                                                 ' <button type="submit"'+
-                                                          ' ng-click="ctrl.close(reservation.id)"'+
+                                                 ' <button ng-show="ctrl.canClose()" type="submit"'+
+                                                          ' ng-click="ctrl.close(id)"'+
                                                           ' class="btn btn-danger btn-sm">'+
                                                       ' <span class="glyphicon glyphicon-remove-circle"></span>'+
                                                       ' <span class="hidden-xs hidden-sm"></span>'+
                                                   ' </button>'+
                                               ' </div>',
 
-            scope={
+            scope:{
                 reservation: '=reservation'
             },
+            controller:["$scope","Reservation",function($scope,Reservation){
+                var ctrl = this;
+                ctrl.close = function(){
+                    Reservation.close({id:ctrl.reservation.id},{}, onSuccess);
+                }
+
+                ctrl.confirm = function(){
+                    Reservation.confirm({id:ctrl.reservation.id},{}, onSuccess);
+                }
+
+                ctrl.canConfirm = function(){
+                    return ctrl.reservation.confirmAllowed;
+                }
+
+                ctrl.canClose = function(){
+                    return ctrl.reservation.closeAllowed;
+                }
+
+               function onSuccess(result){
+                    $scope.$emit('reservation.list.reload',{});
+               }
+            }],
+            controllerAs:'ctrl',
+            bindToController: true
+        }
+    }
+)
+.directive('rsrvStatus',
+    function(){
+        return{
+            restrict:'E',
+            scope:{
+                reservation: '=reservation'
+            },
+            template:'<span class="label {{ctrl.getClass()}}">{{ctrl.reservation.status}}</span>',
             controller:function(){
                 var ctrl = this;
 
-                ctrl.close = function(id){
-                    Reservation.close({id:id},{}, onSuccess);
+                ctrl.getClass = function(){
+                    var mapping = {
+                        'CONFIRMED':'label-success',
+                        'CLOSED':'label-default',
+                        'CONFLICT':'label-danger'
+                    };
+                    return mapping[ctrl.reservation.status];
                 }
-
-                ctrl.confirm = function(id){
-                    Reservation.confirm({id:id},{}, onSuccess);
-                }
-
-
-               function onSuccess(result){
-                alert('ok');
-               }
-
-
             },
-            controllerAs:'ctrl'
+            controllerAs:'ctrl',
+            bindToController: true
         }
     }
 );

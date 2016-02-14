@@ -26,6 +26,7 @@ public class Appl implements Serializable {
     @Column(name = "appl_name", length = 40, nullable = false)
     private String applName;
 
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "appl_compatible_environments",
                joinColumns = @JoinColumn(name="appls_id", referencedColumnName="ID"),

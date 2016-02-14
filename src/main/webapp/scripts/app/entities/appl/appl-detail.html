@@ -24,7 +24,7 @@
                 </td>
                 <td>
                     <span ng-repeat="compatibleEnvironments in appl.compatibleEnvironmentss">
-                        <a class="form-control-static" ui-sref="environment.detail({id: {{compatibleEnvironments.id}}})">{{compatibleEnvironments.environmentName}}</a>{{$last ? '' : ', '}}
+                        <a class="form-control-static" ui-sref="environment.detail({id: {{compatibleEnvironments.id}}})">{{compatibleEnvironments.environmentDescription}}</a>{{$last ? '' : ', '}}
                     </span>
                 </td>
             </tr>

@@ -12,6 +12,11 @@ angular.module('environmentreservationApp')
                 method: 'PUT',
                 url: 'api/reservations/:id/close'
             },
+            'getClashingReservations':{
+                method: 'GET',
+                isArray: true,
+                url: 'api/reservations/:id/clashing'
+            },
             'get': {
                 method: 'GET',
                 transformResponse: function (data) {

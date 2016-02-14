@@ -24,6 +24,7 @@ public class Reservation implements Serializable {
         TransitionManager(){
             allowedTransitions.add(combine(STATUS_CONFLICT,STATUS_CONFIRMED));
             allowedTransitions.add(combine(STATUS_CONFIRMED,STATUS_CLOSED));
+            allowedTransitions.add(combine(STATUS_CONFIRMED,STATUS_CONFLICT));
             allowedTransitions.add(combine(STATUS_CONFLICT,STATUS_CLOSED));
             allowedTransitions.add(combine(STATUS_NEW,STATUS_CONFLICT));
             allowedTransitions.add(combine(STATUS_NEW,STATUS_CONFIRMED));
@@ -32,8 +33,9 @@ public class Reservation implements Serializable {
             return status1+"/"+status2;
         }
 
-        private boolean transitionAllowed(String status1,String status2){
-            return allowedTransitions.contains(combine(status1,status2));
+        boolean transitionAllowed(String status1,String status2){
+            return
+                allowedTransitions.contains(combine(status1,status2));
         }
         public void set(Reservation reservation, String newStatus) throws IllegalStateException{
             if(transitionAllowed(reservation.getStatus(),newStatus)){
@@ -189,11 +191,34 @@ public class Reservation implements Serializable {
         TRANSITION_MANAGER.set(this,STATUS_CONFLICT);
     }
 
+
+    public void markAsConfirmed(){
+        this.setStatus(STATUS_CONFIRMED);
+    }
+    public void markAsConflicted(){
+        this.setStatus(STATUS_CONFLICT);
+    }
     public void close(){
         TRANSITION_MANAGER.set(this,STATUS_CLOSED);
     }
 
     public boolean isClosed(){
         return this.status.equals(STATUS_CLOSED);
+    }
+
+    public boolean isConfirmAllowed(){
+        return TRANSITION_MANAGER.transitionAllowed(this.getStatus(),STATUS_CONFIRMED);
+    }
+
+    public boolean isCloseAllowed(){
+        return TRANSITION_MANAGER.transitionAllowed(this.getStatus(),STATUS_CLOSED);
+    }
+
+    public boolean isEditAllowed(){
+        return !STATUS_CLOSED.equals(this.getStatus());
+    }
+
+    public boolean isNew(){
+        return this.getStatus()==STATUS_NEW;
     }
 }
