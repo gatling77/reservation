@@ -26,11 +26,11 @@ angular.module('environmentreservationApp')
             controller:["$scope","Reservation",function($scope,Reservation){
                 var ctrl = this;
                 ctrl.close = function(){
-                    Reservation.close({id:ctrl.reservation.id},{}, onSuccess);
+                    Reservation.close({id:ctrl.reservation.id},{}, onSuccess(ctrl.reservation, 'CLOSED'));
                 }
 
                 ctrl.confirm = function(){
-                    Reservation.confirm({id:ctrl.reservation.id},{}, onSuccess);
+                    Reservation.confirm({id:ctrl.reservation.id},{}, onSuccess(ctrl.reservation, 'CONFIRMED'));
                 }
 
                 ctrl.canConfirm = function(){
@@ -41,8 +41,10 @@ angular.module('environmentreservationApp')
                     return ctrl.reservation.closeAllowed;
                 }
 
-               function onSuccess(result){
-                    $scope.$emit('reservation.list.reload',{});
+               function onSuccess(reservation,status){
+                    return function(result){
+                        $scope.$emit('reservation.status.change',{reservation:reservation,status:status});
+                    }
                }
             }],
             controllerAs:'ctrl',

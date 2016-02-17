@@ -27,7 +27,7 @@
             <div class="well" ui-view="content"></div>
 
             <div class="footer">
-                <p translate="footer">This is your footer</p>
+                <p translate="footer">Powered by Defi, property of Cornèr Bank.</p>
             </div>
         </div>
 
@@ -58,6 +58,7 @@
         <script src="bower_components/json3/lib/json3.js"></script>
         <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
         <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+        <script src="bower_components/underscore/underscore.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -96,7 +97,8 @@
     <script src="scripts/components/util/date-util.service.js"></script>
     <script src="scripts/components/util/data-util.service.js"></script>
     <script src="scripts/components/util/sort.directive.js"></script>
-    <script src="scripts/app/account/account.js"></script>
+        <script src="scripts/components/util/underscore.service.js"></script>
+        <script src="scripts/app/account/account.js"></script>
     <script src="scripts/app/account/activate/activate.js"></script>
     <script src="scripts/app/account/activate/activate.controller.js"></script>
     <script src="scripts/app/account/login/login.js"></script>
@@ -104,8 +106,6 @@
     <script src="scripts/app/account/password/password.js"></script>
     <script src="scripts/app/account/password/password.controller.js"></script>
     <script src="scripts/app/account/password/password.directive.js"></script>
-    <script src="scripts/app/account/register/register.js"></script>
-    <script src="scripts/app/account/register/register.controller.js"></script>
     <script src="scripts/app/account/settings/settings.js"></script>
     <script src="scripts/app/account/settings/settings.controller.js"></script>
     <script src="scripts/app/account/reset/finish/reset.finish.controller.js"></script>
