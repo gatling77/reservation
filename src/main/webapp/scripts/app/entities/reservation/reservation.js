@@ -19,6 +19,20 @@ angular.module('environmentreservationApp')
                 resolve: {
                 }
             })
+            .state('reservation.calendar', {
+                parent: 'entity',
+                url: '/reservation/calendar',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'Reservation Calendar'
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/reservation/reservation-calendar.html',
+                        controller: 'ReservationCalendarController',
+                    }
+                }
+            })
             .state('reservation.detail', {
                 parent: 'entity',
                 url: '/reservation/{id}',

@@ -1,57 +1,22 @@
 'use strict';
 
-angular.module('environmentreservationApp').controller('ReservationCalendargitController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'Reservation', 'User', 'Appl', 'Environment',
-        function($scope, $stateParams, $uibModalInstance, entity, Reservation, User, Appl, Environment) {
-
-        $scope.reservation = entity;
-        $scope.users = User.query();
-        $scope.appls = Appl.query();
-
-        $scope.load = function(id) {
-            Reservation.get({id : id}, function(result) {
-                $scope.reservation = result;
-            });
-        };
-
-        var onSaveSuccess = function (result) {
-            $scope.$emit('environmentreservationApp:reservationUpdate', result);
-            $uibModalInstance.close(result);
-            $scope.isSaving = false;
-        };
-
-        var onSaveError = function (result) {
-            $scope.isSaving = false;
-        };
-
-        $scope.save = function () {
-            $scope.isSaving = true;
-            if ($scope.reservation.id != null) {
-                Reservation.update($scope.reservation, onSaveSuccess, onSaveError);
-            } else {
-                Reservation.save($scope.reservation, onSaveSuccess, onSaveError);
+angular.module('environmentreservationApp')
+	.controller('ReservationCalendarController', function($scope,  Reservation) {
+        $scope.eventSource =
+        {
+        events: [
+                {
+                title: 'Event1',
+                start: '2016-03-03'
+            },
+            {
+                title: 'Event2',
+                start: '2016-03-06'
             }
-        };
+        ],
+        color: 'yellow',   // an option!
+        textColor: 'black' // an option!
+       };
+        $scope.eventSources = [$scope.eventSource];
+    });
 
-        $scope.clear = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-        $scope.datePickerForStartDate = {};
-
-        $scope.datePickerForStartDate.status = {
-            opened: false
-        };
-
-        $scope.datePickerForStartDateOpen = function($event) {
-            $scope.datePickerForStartDate.status.opened = true;
-        };
-        $scope.datePickerForEndDate = {};
-
-        $scope.datePickerForEndDate.status = {
-            opened: false
-        };
-
-        $scope.datePickerForEndDateOpen = function($event) {
-            $scope.datePickerForEndDate.status.opened = true;
-        };
-}]);
