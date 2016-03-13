@@ -33,7 +33,7 @@
                                  baseTableName="environment"
                                  constraintName="fk_environment_level_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="d tap"/>
+                                 referencedTableName="dtap"/>
 
     </changeSet>
 </databaseChangeLog>
