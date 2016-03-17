@@ -93,4 +93,7 @@ angular.module('environmentreservationApp', ['LocalStorageModule',
             is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
             pattern: /bool|true|0|1/
         });
-    }]);
+    }])
+    .factory('_', ['$window', function($window) {
+       return $window._; // assumes underscore has already been loaded on the page
+     }]);

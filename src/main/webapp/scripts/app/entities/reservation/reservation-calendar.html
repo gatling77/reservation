@@ -1,2 +1,36 @@
+<div>
+    <h2>Reservations</h2>
+    <jh-alert-error></jh-alert-error>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-2 no-padding-left">
+                <button class="btn btn-primary" ui-sref="reservation.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span
+                        class="hidden-xs">Create new Reservation
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-2">
+                <button class="btn btn-info" ui-sref="reservation.calendar" >
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    <span
+                        class="hidden-xs">Show Calendar
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                    <label for="field_environment">environment</label>
+                    <select class="form-control" id="field_environment" name="environment" ng-model="selectedEnv" ng-options="environment as environment.environmentDescription for environment in environments track by environment.id">
+                        <option value=""></option>
+                    </select>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
 
+</div>
