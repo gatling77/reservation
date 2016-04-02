@@ -3,19 +3,11 @@
     <jh-alert-error></jh-alert-error>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-2 no-padding-left">
-                <button class="btn btn-primary" ui-sref="reservation.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-info" ui-sref="reservation" >
+                    <span class="glyphicon glyphicon-th-list"></span>
                     <span
-                        class="hidden-xs">Create new Reservation
-                    </span>
-                </button>
-            </div>
-            <div class="col-xs-2">
-                <button class="btn btn-info" ui-sref="reservation.calendar" >
-                    <span class="glyphicon glyphicon-calendar"></span>
-                    <span
-                        class="hidden-xs">Show Calendar
+                        class="hidden-xs">Show List
                     </span>
                 </button>
             </div>
@@ -31,6 +23,19 @@
             </div>
         </div>
     </div>
-<div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
-
+    <div class="row">
+        <div class="col-xs-10">
+            <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+        </div>
+        <div class="col-xs-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">Legend</div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li ng-repeat="legendItem in eventSources" style="background-color:{{legendItem.color}}" class="list-group-item">{{legendItem.environment}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -3,17 +3,31 @@
 angular.module('environmentreservationApp')
 	.controller('ReservationCalendarController', ['$scope','Reservation', 'Environment','_', function($scope,  Reservation,Environment ,_) {
 
+        var colorSets = [
+            {color:'Red', textColor:'Black'},
+            {color:'Green', textColor:'Black'},
+            {color:'Blue', textColor:'Black'},
+            {color:'LightGray', textColor:'Black'},
+            {color:'Yellow', textColor:'Black'},
+            {color:'LightPink', textColor:'Black'},
+        ];
+
+        var reservations = [];
+
         $scope.eventSources = [];
 
         $scope.environments = Environment.query();
         $scope.selectedEnv = null;
 
 
-        $scope.$watch('selectedEnv',function(){});
+        $scope.$watch('selectedEnv',function(newVal,oldVal){
+            alert(newVal+" "+oldVal);
+
+        });
 
 	    Reservation.query(function(values){
-	      var events = convertToEvent(values);
-	      _.reduce(events,function(acc,e){acc.push(e); return acc;}, $scope.eventSources);
+	       _.reduce(convertToEvent(values),accumulate, $scope.eventSources);
+	       _.reduce(values,accumulate, reservations);
 	     });
 
        function convertToEvent(reservations){
@@ -22,9 +36,10 @@ angular.module('environmentreservationApp')
                })
            .values()
            .map(function(l){
-                return {
-                    events:l
-              };
+                return _.extend({
+                    events:l,
+                    environment:l[0].reservation.environment.environmentDescription
+              }, pickColor());
            })
            .value();
         return result;
@@ -36,9 +51,22 @@ angular.module('environmentreservationApp')
                        title:r.project,
                        start:r.startDate,
                        end:r.endDate,
-                       editable:r.editAllowed,
+                       editable:false,
                        reservation:r
                        };
                    }
+
+       function pickColor(){
+            if (colorSets.length>0){
+                return colorSets.pop();
+            }else{
+                return {};
+            }
+       }
+
+
+      function accumulate(acc,e){
+        acc.push(e); return acc;
+       }
     }]);
 
