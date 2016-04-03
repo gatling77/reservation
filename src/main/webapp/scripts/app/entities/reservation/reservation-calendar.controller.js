@@ -12,23 +12,34 @@ angular.module('environmentreservationApp')
             {color:'LightPink', textColor:'Black'},
         ];
 
-        var reservations = [];
 
+        $scope.allEventSources = [];
         $scope.eventSources = [];
 
-        $scope.environments = Environment.query();
         $scope.selectedEnv = null;
 
 
         $scope.$watch('selectedEnv',function(newVal,oldVal){
-            alert(newVal+" "+oldVal);
-
-        });
+            if (_.isNull(oldVal) && _.isNull(newVal))return;
+            applyFilter();
+         });
 
 	    Reservation.query(function(values){
-	       _.reduce(convertToEvent(values),accumulate, $scope.eventSources);
-	       _.reduce(values,accumulate, reservations);
-	     });
+	       _.reduce(convertToEvent(values),accumulate, $scope.allEventSources);
+	       applyFilter();
+	      });
+
+
+        function applyFilter(){
+            $scope.eventSources.length = 0;
+            var filtered = _.filter($scope.allEventSources,function(val){
+
+                return _.isNull($scope.selectedEnv) ||  (val.environmentId == $scope.selectedEnv.environmentId);
+
+             });
+           _.reduce(filtered, accumulate, $scope.eventSources);
+        }
+
 
        function convertToEvent(reservations){
             var result =  _.chain(reservations).map(fromReservationToEvent).groupBy(function(e){
@@ -38,7 +49,8 @@ angular.module('environmentreservationApp')
            .map(function(l){
                 return _.extend({
                     events:l,
-                    environment:l[0].reservation.environment.environmentDescription
+                    environment:l[0].reservation.environment.environmentDescription,
+                    environmentId:l[0].reservation.environment.id
               }, pickColor());
            })
            .value();

@@ -15,7 +15,7 @@
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
                     <label for="field_environment">environment</label>
-                    <select class="form-control" id="field_environment" name="environment" ng-model="selectedEnv" ng-options="environment as environment.environmentDescription for environment in environments track by environment.id">
+                    <select class="form-control" id="field_environment" name="environment" ng-model="selectedEnv" ng-options="environment as environment.environment for environment in allEventSources track by environment.environmentId">
                         <option value=""></option>
                     </select>
                 </div>
@@ -32,7 +32,7 @@
                 <div class="panel-heading">Legend</div>
                 <div class="panel-body">
                     <ul class="list-group">
-                        <li ng-repeat="legendItem in eventSources" style="background-color:{{legendItem.color}}" class="list-group-item">{{legendItem.environment}}</li>
+                        <li ng-repeat="legendItem in eventSources track by legendItem.environmentId" style="background-color:{{legendItem.color}}" class="list-group-item">{{legendItem.environment}}</li>
                     </ul>
                 </div>
             </div>
