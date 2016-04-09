@@ -156,7 +156,6 @@ public class ReservationService {
                 reservation.getEnvironment().getId()).spliterator(), false)
                 .filter(r -> r.getStartDate().isBefore(reservation.getEndDate()) && r.getEndDate().isAfter(reservation.getStartDate()))
                 .filter(r -> !r.isClosed())
-                .filter(r -> r.getId() != reservation.getId())
             .collect(Collectors.toList());
     }
 }

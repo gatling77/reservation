@@ -12,17 +12,21 @@
                 </button>
             </div>
             <div class="col-xs-2">
-                <button class="btn btn-info" ui-sref="reservation.calendar" >
-                    <span class="glyphicon glyphicon-calendar"></span>
-                    <span
-                        class="hidden-xs">Show Calendar
-                    </span>
+                <button class="btn btn-info" ng-click="toggleCalendarMode()" >
+                    <div ng-if="!calendarMode">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                        <span class="hidden-xs">Show Calendar</span>
+                    </div>
+                    <div ng-if="calendarMode">
+                        <span class="glyphicon glyphicon-list"></span>
+                        <span class="hidden-xs">Show List</span>
+                    </div>
                 </button>
             </div>
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="search">
+                        <input type="text" class="form-control" ng-model="rc.searchQuery" id="searchQuery" placeholder="search">
                         <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" ng-click="search()">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -44,6 +48,7 @@
         </div>
     </div>
     <br/>
+    <div ng-if="!calendarMode">
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
@@ -111,4 +116,24 @@
         </table>
     </div>
     <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
+    </div>
+    <div ng-if="calendarMode" class="row">
+        <div class="col-xs-10">
+            <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+        </div>
+        <div class="col-xs-2">
+            <div class="panel panel-info">
+                <div class="panel-heading">Legend</div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <li ng-repeat="legendItem in eventSources track by legendItem.environmentId" style="background-color:{{legendItem.color}}" class="list-group-item">{{legendItem.environment}}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
+

@@ -3,6 +3,18 @@
 angular.module('environmentreservationApp')
     .controller('ReservationController', function ($scope, $state, Reservation, ReservationSearch, ParseLinks, AlertService , _) {
 
+        var colorSets = [
+            {color:'Red', textColor:'Black'},
+            {color:'Green', textColor:'Black'},
+            {color:'Blue', textColor:'Black'},
+            {color:'LightGray', textColor:'Black'},
+            {color:'Yellow', textColor:'Black'},
+            {color:'LightPink', textColor:'Black'},
+        ];
+
+        $scope.rc = new Object();
+        $scope.rc.searchQuery = "";
+
         $scope.reservations = [];
         $scope.predicate = 'id';
         $scope.reverse = true;
@@ -10,10 +22,19 @@ angular.module('environmentreservationApp')
         $scope.filterMessage;
         $scope.filterFunction;
 
+        $scope.calendarMode = false;
+        $scope.eventSources = [];
+
+
 
         $scope.$on('reservation.status.change',function(event,args){
             $scope.refresh();
         });
+
+        $scope.$watch('reservations', function(newVal, oldVal){
+            initEventSources();
+        });
+
 
         $scope.loadAll = function() {
              $scope.filterFunction = $scope.loadAll;
@@ -24,24 +45,30 @@ angular.module('environmentreservationApp')
               });
          };
 
+        $scope.loadAll();
+
+        $scope.toggleCalendarMode = function(){
+            $scope.calendarMode = !$scope.calendarMode;
+        }
 
         $scope.loadPage = function(page) {
             $scope.page = page;
             $scope.loadAll();
         };
-        $scope.loadAll();
 
         $scope.getClashing = function(reservation){
             $scope.filterFunction = function(){$scope.getClashing(reservation);};
-            $scope.reservations = Reservation.getClashingReservations({id:reservation.id});
-            setFilterMessage('reservations clashing with id '+reservation.id);
+            Reservation.getClashingReservations({id:reservation.id}, function(result){
+                    $scope.reservations = result;
+                    setFilterMessage('reservations clashing with id '+reservation.id);
+            });
         }
 
         $scope.search = function () {
             $scope.filterFunction = $scope.search;
-            ReservationSearch.query({query: $scope.searchQuery}, function(result) {
+            ReservationSearch.query({query: $scope.rc.searchQuery}, function(result) {
                 $scope.reservations = result;
-                setFilterMessage($scope.searchQuery);
+                setFilterMessage($scope.rc.searchQuery);
             }, function(response) {
                 if(response.status === 404) {
                     $scope.loadAll();
@@ -51,7 +78,7 @@ angular.module('environmentreservationApp')
 
         $scope.clearFilter = function () {
             $scope.filterMessage = '';
-            $scope.searchQuery = '';
+            $scope.rc.searchQuery = '';
             $scope.loadAll();
         }
 
@@ -73,4 +100,54 @@ angular.module('environmentreservationApp')
         function setFilterMessage(message){
             $scope.filterMessage = message;
         }
+
+        // Calendar filter
+
+        function initEventSources(){
+            $scope.eventSources.length=0;
+            _.reduce(convertToEvent($scope.reservations),accumulate, $scope.eventSources);
+        }
+
+
+       function convertToEvent(reservations){
+            var result =  _.chain(reservations).map(fromReservationToEvent).groupBy(function(e){
+                return e.reservation.environment.id;
+               })
+           .values()
+           .map(function(l){
+                return _.extend({
+                    events:l,
+                    environment:l[0].reservation.environment.environmentDescription,
+                    environmentId:l[0].reservation.environment.id
+              }, pickColor());
+           })
+           .value();
+        return result;
+       }
+
+       function fromReservationToEvent(r){
+                       return {
+                       id:r.id,
+                       title:r.project,
+                       start:r.startDate,
+                       end:r.endDate,
+                       editable:false,
+                       reservation:r
+                       };
+                   }
+
+       function pickColor(){
+            if (colorSets.length>0){
+                var color = colorSets.shift();
+                colorSets.push(color);
+                return color;
+            }else{
+                return {};
+            }
+       }
+
+      function accumulate(acc,e){
+        acc.push(e); return acc;
+       }
+
     });
