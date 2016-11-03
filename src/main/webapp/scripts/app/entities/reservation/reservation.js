@@ -10,6 +10,7 @@ angular.module('environmentreservationApp')
                     authorities: ['ROLE_USER'],
                     pageTitle: 'Reservations'
                 },
+                anonymous: true,
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/entities/reservation/reservations.html',

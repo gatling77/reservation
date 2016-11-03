@@ -1,6 +1,7 @@
 package ch.corner.envres.web.rest;
 
 import ch.corner.envres.domain.Reservation;
+import ch.corner.envres.security.AuthoritiesConstants;
 import ch.corner.envres.service.ClashingReservationException;
 import ch.corner.envres.service.ReservationService;
 import ch.corner.envres.web.rest.util.HeaderUtil;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -200,12 +202,19 @@ public class ReservationResource {
      * SEARCH  /_search/reservations/:query -> search for the reservation corresponding
      * to the query.
      */
-    @RequestMapping(value = "/_search/reservations/{query:.+}",
+    @RequestMapping(value = "/_search/reservations",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Reservation> searchReservations(@PathVariable String query) {
+    public List<Reservation> searchReservations(@RequestParam(required=false) String query,
+    		@RequestParam(required=false) String reservationRequestor,
+    		@RequestParam(required=false) String status,
+    		@RequestParam(required=false) String project,
+    		@RequestParam(required=false) String appName,
+    		@RequestParam(required=false) String envDescription,
+    		@RequestParam(required=false) String dateFrom,
+    		@RequestParam(required=false) String dateTo) {
         log.debug("Request to search Reservations for query {}", query);
-        return reservationService.search(query);
+        return reservationService.search(query, reservationRequestor, status, project, appName, envDescription, dateFrom, dateTo);
     }
 }

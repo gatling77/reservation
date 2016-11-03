@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('environmentreservationApp', ['LocalStorageModule',
-    'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
+    'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'ui.toggle', 
     // jhipster-needle-angularjs-add-module JHipster will add new module here
-    'ui.bootstrap', 'ui.router', 'ui.calendar', 'infinite-scroll', 'angular-loading-bar'])
+    'ui.bootstrap', 'ngAnimate', 'ui.router', 'ui.calendar', 'infinite-scroll', 'angular-loading-bar', 'mwl.calendar'])
 
     .run(function ($rootScope, $location, $window, $http, $state,  Auth, Principal, ENV, VERSION) {
 
@@ -12,8 +12,8 @@ angular.module('environmentreservationApp', ['LocalStorageModule',
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
-
-            if (Principal.isIdentityResolved()) {
+            console.log(toState);
+            if (Principal.isIdentityResolved() && toState.anonymous != true) {
                 Auth.authorize();
             }
 

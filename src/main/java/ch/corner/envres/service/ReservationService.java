@@ -3,7 +3,15 @@ package ch.corner.envres.service;
 import ch.corner.envres.domain.Reservation;
 import ch.corner.envres.repository.ReservationRepository;
 import ch.corner.envres.repository.search.ReservationSearchRepository;
+
+import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.FilteredQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,6 +25,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;;
 
 /**
  * Service Implementation for managing Reservation.
@@ -125,17 +136,38 @@ public class ReservationService {
      * to the query.
      */
     @Transactional(readOnly = true)
-    public List<Reservation> search(String query) {
+    public List<Reservation> search(String query, String reservationRequestor, String status, String project, String appName, String envDescription, String dateFrom, String dateTo) {
 
         log.debug("REST request to search Reservations for query {}", query);
-       QueryStringQueryBuilder queryBuilder = queryStringQuery(query)
-           .field("reservation.environment.environmentDescription")
-           .field("reservation.appl.applName")
-           .field("reservation.project")
-           .field("reservation.status")
-           .field("reservation.requestor")
-           ;
 
+
+        BoolQueryBuilder queryBuilder = boolQuery();
+        
+        		if(query != null && !query.equals("")) 
+        			queryBuilder.should(termQuery("reservation.environment.environmentDescription", query))
+	        		.should(termQuery("reservation.appl.applName", query))
+	        		.should(termQuery("reservation.project", query))
+	        		.should(termQuery("reservation.status", query))
+	        		.should(termQuery("reservation.requestor.login", query))
+	        		;
+        
+        		if(dateFrom != null && !dateFrom.equals(""))
+        			queryBuilder.must(rangeQuery("reservation.startDate").from(dateFrom));
+        		if(dateTo != null && !dateTo.equals(""))
+        			queryBuilder.must(rangeQuery("reservation.endDate").to(dateTo));
+        		if(envDescription != null && !envDescription.equals(""))
+        			queryBuilder.must(termQuery("reservation.environment.environmentDescription", envDescription));
+        		if(appName != null && !appName.equals("")) 
+        			queryBuilder.must(termQuery("reservation.appl.applName", appName));
+        		if(project != null && !project.equals(""))
+        			queryBuilder.must(termQuery("reservation.project", project));
+        		if(status != null && !status.equals(""))
+        			queryBuilder.must(termQuery("reservation.status", status));
+        		if(reservationRequestor != null && !reservationRequestor.equals(""))
+        			queryBuilder.must(termQuery("reservation.requestor.login", reservationRequestor));
+        		
+        		
+        
         return StreamSupport
             .stream(reservationSearchRepository.search(queryBuilder).spliterator(), false)
             .collect(Collectors.toList());

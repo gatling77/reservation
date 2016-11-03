@@ -5,6 +5,7 @@ angular.module('environmentreservationApp').controller('ReservationDialogControl
         function($scope, $stateParams, $uibModalInstance, entity, Reservation, User, Appl, Environment) {
 
         $scope.reservation = entity;
+        
         $scope.users = User.query();
         $scope.appls = Appl.query();
 

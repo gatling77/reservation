@@ -1,136 +1,223 @@
 <div>
     <h2>Reservations</h2>
     <jh-alert-error></jh-alert-error>
-    <div class="container-fluid">
+    <div class="container-fluid" ng-switch="isAuthenticated()" > 
+      <style>
+           button.accordion, button.accordio.active {
+                background-color: #ddd;
+                color: #444;
+                cursor: pointer;
+                padding: 5px;
+                width: 100%;
+                text-align: left;
+                border: none;
+                outline: none;
+                transition: 0.4s;
+            }
+
+            /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+            button.accordion:hover {
+                background-color: #f5f5f5;
+            }
+
+            /* Style the accordion panel. Note: hidden by default */
+            div.panel {
+                padding: 0 5px;
+                background-color: #ddd;
+                max-height: 0;
+                overflow: hidden;
+                transition: 0.6s ease-in-out;
+                opacity: 0;
+            }
+
+            div.panel.show {
+                opacity: 1;
+                max-height: 400px; /* Whatever you like, as long as its more than the height of the content (on all screen sizes) */
+            }
+       </style>
         <div class="row">
-            <div class="col-xs-2 no-padding-left">
-                <button class="btn btn-primary" ui-sref="reservation.new" >
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span
-                        class="hidden-xs">Create new Reservation
-                    </span>
-                </button>
-            </div>
-            <div class="col-xs-2">
-                <button class="btn btn-info" ng-click="toggleCalendarMode()" >
-                    <div ng-if="!calendarMode">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                        <span class="hidden-xs">Show Calendar</span>
+             <button class="accordion" ng-click="clearFilter()">Filter:
+                 <span class="glyphicon glyphicon-filter"></span>
+             </button>
+            <div class="panel">
+               <form name="searchFilter" class="form-group">
+                    <div class="row" >
+                        <div class="col-xs-3  no-padding-right">
+                            <input type="text" class="form-control" ng-model="rc.searchQuery" id="searchQuery" placeholder="OR search">
+                        </div>
+                        <div class="col-xs-3 no-padding-left  no-padding-right">
+                            <input type="text" class="form-control" ng-model="rc.searchStart" id="searchStart" placeholder="Start date (yyyy-MM-DD)"  >   
+                        </div>
+                        <div class="col-xs-3 no-padding-left  no-padding-right">
+                            <input type="text" class="form-control" ng-model="rc.searchEnd" id="searchEnd" placeholder="End date (yyyy-MM-DD)">
+                        </div>
+                        <div class="col-xs-2 no-padding-right no-padding-left">
+                            <input type="text" class="form-control" ng-model="rc.searchProject" id="searchProject" placeholder="Project"> 
+                        </div>
+                        <div class="col-xs-1 no-padding-left">
+                            <button style="width:100%"class=" btn btn-info " ng-click="clearFilter()">
+                                <span class="glyphicon glyphicon-erase"></span>
+                            </button>                              
+                        </div>
                     </div>
-                    <div ng-if="calendarMode">
-                        <span class="glyphicon glyphicon-list"></span>
-                        <span class="hidden-xs">Show List</span>
-                    </div>
-                </button>
-            </div>
-            <div class="col-xs-8 no-padding-right">
-                <form name="searchForm" class="form-inline">
-                    <div class="input-group pull-right" >
-                        <input type="text" class="form-control" ng-model="rc.searchQuery" id="searchQuery" placeholder="search">
-                        <span  class="input-group-btn width-min" >
-                            <button class="btn btn-info" ng-click="search()">
+                    <div class="row " >
+                        <div class="col-xs-3  no-padding-right ">
+                        <input type="text" class="form-control" ng-model="rc.searchStatus" id="searchStatus" placeholder="Status">
+                        </div>
+                        <div class="col-xs-3  no-padding-left no-padding-right">
+                        <input type="text" class="form-control" ng-model="rc.searchRequestor" id="searchRequestor" placeholder="Requestor">
+                        </div>
+                       <div class="col-xs-3 no-padding-left no-padding-right">
+                            <select class="form-control"  ng-model="rc.searchApp" ng-switch-when="true" ng-options=" app.applName for app in applications track by app.id">
+                                <option value="" selected>Select App</option>
+                            </select>
+                            <input type="text" class="form-control" ng-switch-when="false" ng-model="rc.searchApp" id="searchApp" placeholder="App">
+                        </div>
+
+                        <div class="col-xs-2 no-padding-left no-padding-right">
+                            <select class="form-control"   ng-model="rc.searchEnvoirnment" ng-switch-when="true" ng-options=" evn.environmentName for evn in enviornments track by evn.id">
+                                <option value="" selected>Select Envoirnment</option>
+                            </select>
+                            <input type="text" class="form-control" ng-switch-when="false" ng-model="rc.searchEnvoirnment" id="searchEnvoirnment" placeholder="Environment">
+                        </div>
+                        <div class="col-xs-1 no-padding-left " >
+                            <button class="btn btn-info " ng-click="search()" style="width:100%">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
-                        </span>
+                        </div>
                     </div>
+                   
+                  
                 </form>
             </div>
         </div>
-        <div ng-show="filterMessage" class="row">
-            <div class="col-xs-4 no-padding-left"></div>
-            <div class="col-xs-8 no-padding-right">
-                    <button class="btn btn-default" ng-click="clearFilter()">
-                        <span class="glyphicon glyphicon-filter"></span>
-                        {{filterMessage}}
-                        <span class="glyphicon glyphicon-remove"></span>
-                    </button>
+
+            <div class="row">
+                <div class="col-xs-5 no-padding-left" >
+                    <button class="btn btn-primary" ui-sref="reservation.new" ng-switch-when="true">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        <span
+                            class="hidden-xs">Create new Reservation
+                        </span>
+                    </button> 
+                </div >
+                <div class="col-xs-2">
+                    <toggle  offstyle="btn-info" onstyle="btn-info" ng-model="toggleValue" ng-change="toggleCalendarMode()" 
+                    on="<i class=' glyphicon glyphicon-list'></i> <span class='hidden-xs'>Show List</span>" 
+                    off="<i class=' glyphicon glyphicon-calendar'></i> <span class='hidden-xs'>Show Calendar</span>"></toggle>
+                </div>
             </div>
-        </div>
+     
     </div>
     <br/>
     <div ng-if="!calendarMode">
-    <div class="table-responsive">
-        <table class="jh-table table table-striped">
-            <thead>
-                <tr jh-sort="predicate" ascending="reverse" callback="loadAll()">
-                    <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="startDate"><span>StartDate</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="endDate"><span>EndDate</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="project"><span>Project</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="requestor.login"><span>requestor</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="appl.applName"><span>appl</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th jh-sort-by="environment.environmentDescription"><span>environment</span> <span class="glyphicon glyphicon-sort"></span></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="reservation in reservations track by reservation.id">
-                    <td><a ui-sref="reservation.detail({id:reservation.id})">{{reservation.id}}</a></td>
-                        <td>{{reservation.startDate | date:'mediumDate'}}</td>
-                        <td>{{reservation.endDate | date:'mediumDate'}}</td>
-                    <td>{{reservation.project}}</td>
-                    <td><rsrv-status reservation="reservation"></rsrv-status></td>
-                    <td>
-                        {{reservation.requestor.login}}
-                    </td>
-                    <td>
-                        <a ui-sref="appl.detail({id:reservation.appl.id})">{{reservation.appl.applName}}</a>
-                    </td>
-                    <td>
-                        <a ui-sref="environment.detail({id:reservation.environment.id})">{{reservation.environment.environmentDescription}}</a>
-                    </td>
-                    <td> <rsrv-status-command reservation="reservation"></rsrv-status-command></td>
-                    <td class="text-right">
-                        <div class="btn-group flex-btn-group-container">
-                            <button type="submit"
-                                    ng-show="!reservation.closed"
-                                    ng-click="getClashing(reservation)"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-flash"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="reservation.detail({id:reservation.id})"
-                                    class="btn btn-info btn-sm">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit" ng-show="reservation.editAllowed"
-                                    ui-sref="reservation.edit({id:reservation.id})"
-                                    class="btn btn-primary btn-sm">
-                                <span class="glyphicon glyphicon-pencil"></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                            <button type="submit"
-                                    ui-sref="reservation.delete({id:reservation.id})"
-                                    class="btn btn-danger btn-sm">
-                                <span class="glyphicon glyphicon-trash "></span>
-                                <span class="hidden-xs hidden-sm"></span>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
-    </div>
-    <div ng-if="calendarMode" class="row">
-        <div class="col-xs-10">
-            <div ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+        <div class="table-responsive">
+            <table class="jh-table table table-striped">
+                <thead>
+                    <tr jh-sort="predicate" ascending="reverse" callback="loadAll()">
+                        <th jh-sort-by="id"><span>ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="startDate"><span>StartDate</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="endDate"><span>EndDate</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="project"><span>Project</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="requestor.login"><span>requestor</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="appl.applName"><span>appl</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="environment.environmentDescription"><span>environment</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="reservation in reservations track by reservation.id">
+                        <td><a ui-sref="reservation.detail({id:reservation.id})">{{reservation.id}}</a></td>
+                            <td>{{reservation.startDate | date:'mediumDate'}}</td>
+                            <td>{{reservation.endDate | date:'mediumDate'}}</td>
+                        <td>{{reservation.project}}</td>
+                        <td><rsrv-status reservation="reservation"></rsrv-status></td>
+                        <td>
+                            {{reservation.requestor.login}}
+                        </td>
+                        <td>
+                            <a ui-sref="appl.detail({id:reservation.appl.id})">{{reservation.appl.applName}}</a>
+                        </td>
+                        <td>
+                            <a ui-sref="environment.detail({id:reservation.environment.id})">{{reservation.environment.environmentDescription}}</a>
+                        </td>
+                        <td> <rsrv-status-command reservation="reservation"></rsrv-status-command></td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit"
+                                        ng-show="!reservation.closed"
+                                        ng-click="getClashing(reservation)"
+                                        class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-flash"></span>
+                                    <span class="hidden-xs hidden-sm"></span>
+                                </button>
+                                <button type="submit"
+                                        ui-sref="reservation.detail({id:reservation.id})"
+                                        class="btn btn-info btn-sm">
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                    <span class="hidden-xs hidden-sm"></span>
+                                </button>
+                                <button type="submit" ng-show="reservation.editAllowed"
+                                        ui-sref="reservation.edit({id:reservation.id})"
+                                        class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    <span class="hidden-xs hidden-sm"></span>
+                                </button>
+                                <button type="submit"
+                                        ui-sref="reservation.delete({id:reservation.id})"
+                                        class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-trash "></span>
+                                    <span class="hidden-xs hidden-sm"></span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="col-xs-2">
-            <div class="panel panel-info">
-                <div class="panel-heading">Legend</div>
-                <div class="panel-body">
-                    <ul class="list-group">
-                        <li ng-repeat="legendItem in eventSources track by legendItem.environmentId" style="background-color:{{legendItem.color}}" class="list-group-item">{{legendItem.environment}}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
+    </div>
+    <div ng-if="calendarMode" class="row"> 
+        <button
+            class="btn btn-primary"
+            mwl-date-modifier
+            date="viewDate"
+            decrement="calendarView">
+            Previous
+        </button>
+
+        <button
+            class="btn btn-default"
+            mwl-date-modifier
+            date="viewDate"
+            set-to-today>
+            Today
+        </button>
+
+        <button
+            class="btn btn-primary"
+            mwl-date-modifier
+            date="viewDate"
+            increment="calendarView">
+            Next
+        </button>
+        <div class="btn-group pull-right">
+            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'year'" ng-click="vm.cellIsOpen = false">Year</label>
+            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'month'" ng-click="vm.cellIsOpen = false">Month</label>
+            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'week'" ng-click="vm.cellIsOpen = false">Week</label>
+             </div>
+        <mwl-calendar
+            view="calendarView"
+            view-date="viewDate"
+            events="events"
+            view-title="calendarTitle"
+            on-event-click="eventClicked(calendarEvent)"
+            on-view-change-click="viewChangeClicked(calendarNextView)"
+            on-event-times-changed="eventTimesChanged(calendarEvent, calendarNewEventStart, calendarNewEventEnd);"
+            cell-is-open="true">
+        </mwl-calendar>
     </div>
 
 
