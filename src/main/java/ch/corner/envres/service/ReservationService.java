@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -84,8 +86,16 @@ public class ReservationService {
             log.debug("Reservation confirmed");
             return saveAndIndex(reservation);
         } else {
+        	for(Reservation r : clashingReservation) {
+        		if(r.getProject().equals(reservation.getProject())) { //same reservation, discard it
+        			reservation.setId((long)-1);
+        			reservation.setStatus("CONFLICT");
+        			throw new ClashingReservationException(reservation, new ArrayList<Reservation>());
+        		}
+        	}
             reservation.markAsConflicted();
             Reservation result = saveAndIndex(reservation);
+            log.debug(result.toString());
             throw new ClashingReservationException(result, clashingReservation);
         }
     }
@@ -181,7 +191,7 @@ public class ReservationService {
     public List<Reservation> findClashingReservations(Reservation reservation) {
 
         log.debug("Search reservation with potential clash");
-
+        
         return StreamSupport.
             stream(reservationRepository.findByApplAndEnvironment(
                 reservation.getAppl().getId(),

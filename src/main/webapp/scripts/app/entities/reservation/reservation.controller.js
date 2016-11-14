@@ -164,7 +164,6 @@ angular.module('environmentreservationApp')
 
         function initEventSources(){
             $scope.eventSources.length=0;
-            console.log($scope.reservations)
             _.reduce(convertToEvent($scope.reservations),accumulate, $scope.eventSources);
         }
 
@@ -182,7 +181,6 @@ angular.module('environmentreservationApp')
               }, pickColor());
            })
            .value();
-           console.log(result);
         return result;
        }
 
@@ -229,6 +227,7 @@ angular.module('environmentreservationApp')
         acc.push(e); return acc;
        }
     
+
       
 
 //Calendar stuff
@@ -260,26 +259,30 @@ angular.module('environmentreservationApp')
             allDay: true // set to true to display the event as an all day event on the day view
         }
         ];
+
+        //function handles calendar event click
         $scope.eventClicked = function(event) {
             console.log("click");
             console.log(event);
         };
 
+
+        //funcion handles a calendar event drag
         $scope.eventTimesChanged = function(calEvent, newStart, newEnd) {
             calEvent.startsAt = newStart;
             calEvent.endsAt = newEnd;
             calEvent.reservation.endDate = DateUtils.convertLocaleDateToServer(newEnd);
             calEvent.reservation.startDate = DateUtils.convertLocaleDateToServer(newStart);
-            console.log(calEvent.reservation);
             Reservation.update(calEvent.reservation, function(result) {
                 //$scope.$emit('environmentreservationApp:reservationUpdate', result);
-                console.log("success");
-                console.log(result);
+               // console.log("success");
+               // console.log(result);
             }, function(result) {
-                console.log("fail");
-                console.log(result);
+                //console.log("fail");
+                //console.log(result);
             });
         }
+
         $scope.viewChangeClicked = function(nextView) { //this functions disables day view on the calendar
             if (nextView === 'day') {
                 return false;
@@ -287,7 +290,6 @@ angular.module('environmentreservationApp')
         };
 
         function initEvents() {
-            console.log($scope.reservations);
             $scope.events.length=0;
             _.forEach($scope.reservations, function(r) {
                 $scope.events.push({
@@ -295,8 +297,7 @@ angular.module('environmentreservationApp')
                     startsAt: new Date(r.startDate),
                     endsAt: new Date(r.endDate),
                     color: pickColourPalette(),
-                    actions: [
-                        
+                    actions: $scope.isAuthenticated()?[
                           { 
                             label: '<i class=\'glyphicon glyphicon-eye-open\'></i>',                    
                             onClick: function(args) {                             
@@ -318,7 +319,7 @@ angular.module('environmentreservationApp')
                                     $state.go('reservation.delete', {id:args.calendarEvent.reservation.id});                  
                             }
                         }
-                    ],
+                    ]:[],
                     draggable:  $scope.isAuthenticated(),
                     resizable:  $scope.isAuthenticated(),
                     //allDay: true,

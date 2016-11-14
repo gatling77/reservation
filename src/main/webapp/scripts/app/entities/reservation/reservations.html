@@ -1,7 +1,7 @@
-<div>
+<div ng-switch="isAuthenticated()"> 
     <h2>Reservations</h2>
     <jh-alert-error></jh-alert-error>
-    <div class="container-fluid" ng-switch="isAuthenticated()" > 
+    <div class="container-fluid"  > 
       <style>
            button.accordion, button.accordio.active {
                 background-color: #ddd;
@@ -30,6 +30,7 @@
                 opacity: 0;
             }
 
+          
             div.panel.show {
                 opacity: 1;
                 max-height: 400px; /* Whatever you like, as long as its more than the height of the content (on all screen sizes) */
@@ -45,11 +46,11 @@
                         <div class="col-xs-3  no-padding-right">
                             <input type="text" class="form-control" ng-model="rc.searchQuery" id="searchQuery" placeholder="OR search">
                         </div>
+                        <div id="datetimeStart" class="col-xs-3 no-padding-left  no-padding-right ">
+                            <input type="text" class="form-control " ng-model="rc.searchStart" ng-click="showStartDate=true"  is-open="showStartDate" uib-datepicker-popup="yyyy-MM-dd" id="searchStart" placeholder="Start date (yyyy-MM-dd)"  datepicker-append-to-body="true">                 
+                        </div>          
                         <div class="col-xs-3 no-padding-left  no-padding-right">
-                            <input type="text" class="form-control" ng-model="rc.searchStart" id="searchStart" placeholder="Start date (yyyy-MM-DD)"  >   
-                        </div>
-                        <div class="col-xs-3 no-padding-left  no-padding-right">
-                            <input type="text" class="form-control" ng-model="rc.searchEnd" id="searchEnd" placeholder="End date (yyyy-MM-DD)">
+                            <input type="text" class="form-control" ng-model="rc.searchEnd" ng-click="showEndDate=true" is-open="showEndDate"  uib-datepicker-popup="yyyy-MM-dd" id="searchEnd" placeholder="End date (yyyy-MM-DD)" datepicker-append-to-body="true">
                         </div>
                         <div class="col-xs-2 no-padding-right no-padding-left">
                             <input type="text" class="form-control" ng-model="rc.searchProject" id="searchProject" placeholder="Project"> 
