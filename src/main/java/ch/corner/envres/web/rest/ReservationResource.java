@@ -4,6 +4,7 @@ import ch.corner.envres.domain.Reservation;
 import ch.corner.envres.security.AuthoritiesConstants;
 import ch.corner.envres.service.ClashingReservationException;
 import ch.corner.envres.service.ReservationService;
+import ch.corner.envres.web.rest.errors.CustomParameterizedException;
 import ch.corner.envres.web.rest.util.HeaderUtil;
 import ch.corner.envres.web.rest.util.PaginationUtil;
 import com.codahale.metrics.annotation.Timed;
@@ -70,9 +71,13 @@ public class ReservationResource {
                 .body(result);
         } catch (ClashingReservationException e) {
             result = e.getReservation();
-            return ResponseEntity.created(new URI("/api/reservations/" + result.getId()))
-                .headers(HeaderUtil.createWarning("Reservation conflicts with other reservations",""+e.getClashingReservations().size()))
-                .body(result);
+            if (result.getId() == -1) {
+				throw new CustomParameterizedException("Reservation already exists");
+			} else {
+				return ResponseEntity.created(new URI("/api/reservations/" + result.getId()))
+						.headers(HeaderUtil.createWarning("Reservation conflicts with other reservations",""+e.getClashingReservations().size()))
+						.body(result);
+			}
         }
 
     }

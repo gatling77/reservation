@@ -292,8 +292,9 @@ angular.module('environmentreservationApp')
         function initEvents() {
             $scope.events.length=0;
             _.forEach($scope.reservations, function(r) {
+                console.log(r);
                 $scope.events.push({
-                    title: r.appl.applName,
+                    title: r.project + ", " + r.appl.applName + ", " + r.environment.environmentName,
                     startsAt: new Date(r.startDate),
                     endsAt: new Date(r.endDate),
                     color: pickColourPalette(),
@@ -322,7 +323,7 @@ angular.module('environmentreservationApp')
                     ]:[],
                     draggable:  $scope.isAuthenticated(),
                     resizable:  $scope.isAuthenticated(),
-                    //allDay: true,
+                    allDay: true,
                    // cssClass: 'a-css-class-name',
                     //incrementsBadgeTotal: true,
                     reservation: r
