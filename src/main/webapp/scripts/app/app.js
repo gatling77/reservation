@@ -12,8 +12,7 @@ angular.module('environmentreservationApp', ['LocalStorageModule',
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
-            console.log(toState);
-            if (Principal.isIdentityResolved() && toState.anonymous != true) {
+            if (Principal.isIdentityResolved() ) {
                 Auth.authorize();
             }
 

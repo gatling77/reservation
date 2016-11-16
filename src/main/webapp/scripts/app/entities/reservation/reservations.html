@@ -111,7 +111,7 @@
      
     </div>
     <br/>
-    <div ng-if="!calendarMode">
+    <div ng-hide="calendarMode">
         <div class="table-responsive">
             <table class="jh-table table table-striped">
                 <thead>
@@ -123,7 +123,7 @@
                         <th jh-sort-by="status"><span>Status</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th jh-sort-by="requestor.login"><span>requestor</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th jh-sort-by="appl.applName"><span>appl</span> <span class="glyphicon glyphicon-sort"></span></th>
-                        <th jh-sort-by="environment.environmentDescription"><span>environment</span> <span class="glyphicon glyphicon-sort"></span></th>
+                        <th jh-sort-by="environment.environmentName"><span>environment</span> <span class="glyphicon glyphicon-sort"></span></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -180,7 +180,7 @@
         </div>
         <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
     </div>
-    <div ng-if="calendarMode" class="row"> 
+    <div ng-show="calendarMode" class="row"> 
         <button
             class="btn btn-primary"
             mwl-date-modifier
