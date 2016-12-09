@@ -4,6 +4,7 @@ import ch.corner.envres.domain.Reservation;
 import ch.corner.envres.repository.ReservationRepository;
 import ch.corner.envres.repository.search.ReservationSearchRepository;
 
+import org.apache.lucene.queryparser.surround.query.AndQuery;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.FilterBuilder;
@@ -29,7 +30,7 @@ import java.util.stream.StreamSupport;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
 import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 /**
  * Service Implementation for managing Reservation.
@@ -161,11 +162,14 @@ public class ReservationService {
 	        		.should(termQuery("reservation.requestor.login", query))
 	        		;
         
-        		if(dateFrom != null && !dateFrom.equals(""))
-        			queryBuilder.must(rangeQuery("reservation.startDate").from(dateFrom));
-        		if(dateTo != null && !dateTo.equals(""))
-        			queryBuilder.must(rangeQuery("reservation.endDate").to(dateTo));
-        		if(envDescription != null && !envDescription.equals(""))
+        		if(dateFrom != null && !dateFrom.equals("")) {
+        			queryBuilder.must(rangeQuery("reservation.endDate").gte(dateFrom));
+        		
+        		}
+        		if(dateTo != null && !dateTo.equals("")){
+        			queryBuilder.must(rangeQuery("reservation.startDate").lte(dateTo));
+        		}
+        		if(envDescription != null && !envDescription.equals("")) 
         			queryBuilder.must(termQuery("reservation.environment.environmentDescription", envDescription));
         		if(appName != null && !appName.equals("")) 
         			queryBuilder.must(termQuery("reservation.appl.applName", appName));
