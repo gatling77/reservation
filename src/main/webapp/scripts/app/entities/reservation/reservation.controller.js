@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('environmentreservationApp')
-    .controller('ReservationController', function ($scope, $state, DateUtils, calendarConfig, Reservation, ReservationSearch,  Principal, Environment, Appl, ParseLinks, AlertService , _) {
+    .controller('ReservationController', function ($scope, $state, DateUtils, calendarConfig, Reservation, ReservationSearch,  Principal, Environment, Appl, ParseLinks, AlertService , _, $filter) {
 
         var colorSets = [
             {color:'Red', textColor:'Black'},
@@ -27,8 +27,7 @@ angular.module('environmentreservationApp')
 
         if($scope.isAuthenticated()) {
             $scope.enviornments = Environment.query();
-            $scope.applications = Appl.query();
-            
+            $scope.applications = Appl.query();            
         }
         $scope.reservations = [];
         $scope.predicate = 'id';
@@ -96,12 +95,14 @@ angular.module('environmentreservationApp')
         $scope.search = function () {
             $scope.filterFunction = $scope.search;
             var data = {};
-            if($scope.rc.searchQuery)
-                data.query = $scope.rc.searchQuery;
+            //if($scope.rc.searchQuery)
+                //data.query = $scope.rc.searchQuery;
+            console.log($scope.rc.searchStart);
             if($scope.rc.searchStart)
-                data.dateFrom = $scope.rc.searchStart;
-            if($scope.rc.searchEnd)
-                data.dateTo = $scope.rc.searchEnd;
+                data.dateFrom = $filter("date")($scope.rc.searchStart,"yyyy-MM-dd");
+            if($scope.rc.searchEnd) {
+                data.dateTo = $filter("date")($scope.rc.searchEnd,"yyyy-MM-dd");
+            }
             if($scope.rc.searchProject)
                 data.project = $scope.rc.searchProject;
             if($scope.rc.searchStatus)
@@ -111,8 +112,7 @@ angular.module('environmentreservationApp')
             if($scope.rc.searchApp)
                 data.appName = $scope.rc.searchApp.applName;
             if($scope.rc.searchEnvoirnment)
-                data.envDescription = $scope.rc.searchEnvoirnment.searchEnvoirnment;
-
+                data.envDescription = $scope.rc.searchEnvoirnment.environmentDescription;
             ReservationSearch.query(data, function(result) {
                 $scope.reservations = result;
                 //setFilterMessage($scope.rc.searchQuery);
@@ -266,7 +266,7 @@ angular.module('environmentreservationApp')
             $scope.events.length=0;
             _.forEach($scope.reservations, function(r) {
                 $scope.events.push({
-                    title: r.project + ", " + r.appl.applName + ", " + r.environment.environmentName,
+                    title: r.project + ", " + r.appl.applName + ", " + r.environment.environmentDescription,
                     startsAt: new Date(r.startDate),
                     endsAt: new Date(r.endDate),
                     color: pickColourPalette(),

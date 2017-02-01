@@ -211,7 +211,7 @@ public class ReservationResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<Reservation> searchReservations(@RequestParam(required=false) String query,
+    public List<Reservation> searchReservations(
     		@RequestParam(required=false) String reservationRequestor,
     		@RequestParam(required=false) String status,
     		@RequestParam(required=false) String project,
@@ -219,7 +219,7 @@ public class ReservationResource {
     		@RequestParam(required=false) String envDescription,
     		@RequestParam(required=false) String dateFrom,
     		@RequestParam(required=false) String dateTo) {
-        log.debug("Request to search Reservations for query {}", query);
-        return reservationService.search(query, reservationRequestor, status, project, appName, envDescription, dateFrom, dateTo);
+        log.debug("Request to search Reservations ");
+        return reservationService.search(reservationRequestor, status, project, appName, envDescription, dateFrom, dateTo);
     }
 }

@@ -43,30 +43,23 @@
             <div class="panel">
                <form name="searchFilter" class="form-group">
                     <div class="row" >
-                        <div class="col-xs-3  no-padding-right">
-                            <input type="text" class="form-control" ng-model="rc.searchQuery" id="searchQuery" placeholder="OR search">
-                        </div>
-                        <div id="datetimeStart" class="col-xs-3 no-padding-left  no-padding-right ">
+                        <div id="datetimeStart" class="col-md-3 col-xs-3   no-padding-right ">
                             <input type="text" class="form-control " ng-model="rc.searchStart" ng-click="showStartDate=true"  is-open="showStartDate" uib-datepicker-popup="yyyy-MM-dd" id="searchStart" placeholder="Start date (yyyy-MM-dd)"  datepicker-append-to-body="true">                 
                         </div>          
                         <div class="col-xs-3 no-padding-left  no-padding-right">
                             <input type="text" class="form-control" ng-model="rc.searchEnd" ng-click="showEndDate=true" is-open="showEndDate"  uib-datepicker-popup="yyyy-MM-dd" id="searchEnd" placeholder="End date (yyyy-MM-DD)" datepicker-append-to-body="true">
                         </div>
-                        <div class="col-xs-2 no-padding-right no-padding-left">
+                        <div class="col-xs-3 no-padding-right no-padding-left">
                             <input type="text" class="form-control" ng-model="rc.searchProject" id="searchProject" placeholder="Project"> 
                         </div>
-                        <div class="col-xs-1 no-padding-left">
-                            <button style="width:100%"class=" btn btn-info " ng-click="clearFilter()">
-                                <span class="glyphicon glyphicon-erase"></span>
-                            </button>                              
-                        </div>
-                    </div>
-                    <div class="row " >
-                        <div class="col-xs-3  no-padding-right ">
+                        <div class="col-xs-3  no-padding-left ">
                         <input type="text" class="form-control" ng-model="rc.searchStatus" id="searchStatus" placeholder="Status">
                         </div>
-                        <div class="col-xs-3  no-padding-left no-padding-right">
-                        <input type="text" class="form-control" ng-model="rc.searchRequestor" id="searchRequestor" placeholder="Requestor">
+                    </div>
+
+                    <div class="row " >
+                        <div class="col-xs-3  no-padding-right">
+                            <input type="text" class="form-control" ng-model="rc.searchRequestor" id="searchRequestor" placeholder="Requestor">
                         </div>
                        <div class="col-xs-3 no-padding-left no-padding-right">
                             <select class="form-control"  ng-model="rc.searchApp" ng-switch-when="true" ng-options=" app.applName for app in applications track by app.id">
@@ -75,14 +68,18 @@
                             <input type="text" class="form-control" ng-switch-when="false" ng-model="rc.searchApp" id="searchApp" placeholder="App">
                         </div>
 
-                        <div class="col-xs-2 no-padding-left no-padding-right">
-                            <select class="form-control"   ng-model="rc.searchEnvoirnment" ng-switch-when="true" ng-options=" evn.environmentName for evn in enviornments track by evn.id">
+                        <div class="col-xs-3 no-padding-left no-padding-right">
+                            <select class="form-control"   ng-model="rc.searchEnvoirnment" ng-switch-when="true" ng-options=" evn.environmentDescription for evn in enviornments track by evn.id">
                                 <option value="" selected>Select Envoirnment</option>
                             </select>
                             <input type="text" class="form-control" ng-switch-when="false" ng-model="rc.searchEnvoirnment" id="searchEnvoirnment" placeholder="Environment">
                         </div>
-                        <div class="col-xs-1 no-padding-left " >
-                            <button class="btn btn-info " ng-click="search()" style="width:100%">
+                        <div class="col-xs-3 no-padding-left">
+                            <button style="width:49%"class=" btn btn-info " ng-click="clearFilter()">
+                                <span class="glyphicon glyphicon-erase"></span>
+                            </button>                              
+            
+                            <button class="btn btn-info " ng-click="search()" style="width:49%">
                                 <span class="glyphicon glyphicon-search"></span>
                             </button>
                         </div>

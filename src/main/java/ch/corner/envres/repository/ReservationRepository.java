@@ -4,6 +4,7 @@ import ch.corner.envres.domain.Reservation;
 
 import org.springframework.data.jpa.repository.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,4 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation,Long> {
     @Query("select reservation from Reservation reservation where reservation.appl.id = ?1 and reservation.environment.id = ?2")
     List<Reservation> findByApplAndEnvironment(Long applId, Long environmentId);
 
+    @Query("select reservation from Reservation reservation where reservation.endDate >= ?1 and reservation.startDate <= ?2")
+    List<Reservation> findByTimeFrame(LocalDate from, LocalDate to);
 }
