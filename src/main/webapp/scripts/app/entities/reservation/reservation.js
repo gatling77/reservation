@@ -7,7 +7,7 @@ angular.module('environmentreservationApp')
                 parent: 'entity',
                 url: '/reservations',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: [],
                     pageTitle: 'Reservations'
                 },
                 anonymous: true,

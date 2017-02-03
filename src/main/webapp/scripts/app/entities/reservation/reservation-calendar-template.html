@@ -1,0 +1,22 @@
+<button class="btn btn-primary" mwl-date-modifier date="ctrl.viewDate" decrement="ctrl.calendarView">
+            Previous
+        </button>
+
+<button class="btn btn-default" mwl-date-modifier date="ctrl.viewDate" set-to-today>
+            Today
+        </button>
+
+<button class="btn btn-primary" mwl-date-modifier date="ctrl.viewDate" increment="ctrl.calendarView">
+            Next
+        </button>
+<div class="btn-group pull-right">
+    <label class="btn btn-primary" ng-model="ctrl.calendarView" uib-btn-radio="'year'" ng-click="ctrl.cellIsOpen = false">Year</label>
+    <label class="btn btn-primary" ng-model="ctrl.calendarView" uib-btn-radio="'month'" ng-click="ctrl.cellIsOpen = false">Month</label>
+    <label class="btn btn-primary" ng-model="ctrl.calendarView" uib-btn-radio="'week'" ng-click="ctrl.cellIsOpen = false">Week</label>
+</div>
+<div class="row">
+    <mwl-calendar view="ctrl.calendarView" view-date="ctrl.viewDate" events="ctrl.events" view-title="ctrl.calendarTitle" on-event-click="ctrl.eventClicked(calendarEvent)"
+        on-view-change-click="ctrl.viewChangeClicked(calendarNextView)" on-event-times-changed="ctrl.eventTimesChanged(calendarEvent, calendarNewEventStart, calendarNewEventEnd);"
+        cell-is-open="true">
+        </mwl-calendar>
+</div>

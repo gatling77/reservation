@@ -1,4 +1,4 @@
-<div ng-switch="isAuthenticated()"> 
+<div ng-switch="loggedIn"> 
     <h2>Reservations</h2>
     <jh-alert-error></jh-alert-error>
     <div class="container-fluid"  > 
@@ -177,45 +177,8 @@
         </div>
         <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
     </div>
-    <div ng-show="calendarMode" class="row"> 
-        <button
-            class="btn btn-primary"
-            mwl-date-modifier
-            date="viewDate"
-            decrement="calendarView">
-            Previous
-        </button>
-
-        <button
-            class="btn btn-default"
-            mwl-date-modifier
-            date="viewDate"
-            set-to-today>
-            Today
-        </button>
-
-        <button
-            class="btn btn-primary"
-            mwl-date-modifier
-            date="viewDate"
-            increment="calendarView">
-            Next
-        </button>
-        <div class="btn-group pull-right">
-            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'year'" ng-click="vm.cellIsOpen = false">Year</label>
-            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'month'" ng-click="vm.cellIsOpen = false">Month</label>
-            <label class="btn btn-primary" ng-model="calendarView" uib-btn-radio="'week'" ng-click="vm.cellIsOpen = false">Week</label>
-             </div>
-        <mwl-calendar
-            view="calendarView"
-            view-date="viewDate"
-            events="events"
-            view-title="calendarTitle"
-            on-event-click="eventClicked(calendarEvent)"
-            on-view-change-click="viewChangeClicked(calendarNextView)"
-            on-event-times-changed="eventTimesChanged(calendarEvent, calendarNewEventStart, calendarNewEventEnd);"
-            cell-is-open="true">
-        </mwl-calendar>
+    <div ng-show="calendarMode" > 
+        <reservation-calendar reservations="reservations" logged-in="loggedIn"></reservation-calendar>
     </div>
 
 
