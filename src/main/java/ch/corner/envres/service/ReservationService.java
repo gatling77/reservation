@@ -151,7 +151,7 @@ public class ReservationService {
 	public List<Reservation> search( String reservationRequestor, String status, String project, String appName, String envDescription, String dateFrom, String dateTo) {
 
 		log.debug("REST request to search Reservations for query reservationRequestor = {}; status = {}; project = {}; appName = {}, envDescription = {}; dateFrom = {}; dateTo = {}", 
-					reservationRequestor, status, project, appName, envDescription, dateFrom, dateTo);
+				reservationRequestor, status, project, appName, envDescription, dateFrom, dateTo);
 
 		if(dateFrom == null || dateFrom.equals("")) {
 			dateFrom = "1900-01-01";
@@ -163,15 +163,15 @@ public class ReservationService {
 		return StreamSupport
 				.stream(reservationRepository.findByTimeFrame(LocalDate.parse(dateFrom), LocalDate.parse(dateTo)).spliterator(), false)
 				.filter(r -> reservationRequestor == null || reservationRequestor.equals("") || 
-						r.getRequestor().getLogin().equals(reservationRequestor))
+				r.getRequestor().getLogin().equals(reservationRequestor))
 				.filter(r -> status == null || status.equals("") ||
-						r.getStatus().equals(status))
+				r.getStatus().equals(status))
 				.filter(r -> project == null || project.equals("") ||
-						r.getProject().equals(project))
+				r.getProject().equals(project))
 				.filter(r -> appName == null || appName.equals("") ||
-						r.getAppl().getApplName().equals(appName))
+				r.getAppl().getApplName().equals(appName))
 				.filter(r -> envDescription == null || envDescription.equals("") ||
-						r.getEnvironment().getEnvironmentDescription().equals(envDescription))				
+				r.getEnvironment().getEnvironmentDescription().equals(envDescription))				
 				.collect(Collectors.toList());
 	}
 
@@ -184,11 +184,10 @@ public class ReservationService {
 
 		log.debug("Search reservation with potential clash");
 
-		return StreamSupport.
-				stream(reservationRepository.findByApplAndEnvironment(
-						reservation.getAppl().getId(),
-						reservation.getEnvironment().getId()).spliterator(), false)
-				.filter(r -> r.getStartDate().isBefore(reservation.getEndDate()) && r.getEndDate().isAfter(reservation.getStartDate()))
+		return StreamSupport
+				.stream(reservationRepository.findByTimeFrame(reservation.getStartDate(), reservation.getEndDate()).spliterator(), false)
+				.filter(r -> r.getAppl().getId() == reservation.getAppl().getId())
+				.filter(r -> r.getEnvironment().getId() == reservation.getEnvironment().getId())
 				.filter(r -> !r.isClosed())
 				.collect(Collectors.toList());
 	}
