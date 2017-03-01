@@ -63,6 +63,9 @@ public class ReservationResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("reservation", "idexists", "A new reservation cannot already have an ID")).body(null);
         }
 
+        if (reservation.getStatus() == null || !reservation.isNew()) {
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("reservation", "invalidstatus", "A new reservation must have status NEW")).body(null);
+        }
         Reservation result;
         try {
             result = reservationService.save(reservation);

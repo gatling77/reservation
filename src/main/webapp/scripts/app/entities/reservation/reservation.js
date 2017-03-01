@@ -56,7 +56,7 @@ angular.module('environmentreservationApp')
                                     startDate: null,
                                     endDate: null,
                                     project: null,
-                                    status: null,
+                                    status: "NEW",
                                     id: null
                                 };
                             }

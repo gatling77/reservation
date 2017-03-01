@@ -47,7 +47,10 @@ public class Environment implements Serializable {
     }
 
     public String getEnvironmentDescription() {
-        return environmentName+" - "+level.getLevelName();
+    	if(environmentName != null && level != null)
+    		return environmentName+" - "+level.getLevelName();
+    	else
+    		return environmentName + " - " + "undefined lvl";
     }
 
 

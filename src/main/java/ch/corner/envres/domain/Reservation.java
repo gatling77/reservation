@@ -47,7 +47,7 @@ public class Reservation implements Serializable {
     }
 
     private static final TransitionManager TRANSITION_MANAGER = new TransitionManager();
-    public static final String STATUS_NEW = null;
+    public static final String STATUS_NEW = "NEW";
     public static final String STATUS_CLOSED = "CLOSED";
     public static final String STATUS_CONFLICT = "CONFLICT";
     public static final String STATUS_CONFIRMED = "CONFIRMED";
@@ -72,9 +72,9 @@ public class Reservation implements Serializable {
     @Column(name = "project", length = 50, nullable = false)
     private String project;
 
-    @NotNull
+    @NotNull(groups = InputValidation.class)
     @Column(name = "status", nullable = false)
-    private String status = STATUS_NEW;
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "requestor_id")
@@ -203,7 +203,7 @@ public class Reservation implements Serializable {
     }
 
     public boolean isClosed(){
-        return this.status.equals(STATUS_CLOSED);
+    	return STATUS_CLOSED.equals(this.status);
     }
 
     public boolean isConfirmAllowed(){
@@ -218,7 +218,7 @@ public class Reservation implements Serializable {
         return !STATUS_CLOSED.equals(this.getStatus());
     }
 
-    public boolean isNew(){
-        return this.getStatus()==STATUS_NEW;
+    public boolean isNew(){    	
+        return STATUS_NEW.equals(this.getStatus());
     }
 }

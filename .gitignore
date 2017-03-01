@@ -126,3 +126,17 @@ Desktop.ini
 # Maven Wrapper
 ######################
 !.mvn/wrapper/maven-wrapper.jar
+
+
+######################
+# Bower components
+######################
+/src/main/webapp/bower_components/*
+src/main/webapp/bower_components/underscore/.bower.json
+src/main/webapp/bower_components/underscore/bower.json
+src/main/webapp/bower_components/underscore/LICENSE
+src/main/webapp/bower_components/underscore/README.md
+src/main/webapp/bower_components/underscore/underscore.js
+src/main/webapp/bower_components/underscore/underscore-min.js
+src/main/webapp/index.html
+src/main/webapp/index.html

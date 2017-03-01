@@ -1,6 +1,11 @@
 package ch.corner.envres.config;
 
-import ch.corner.envres.security.*;
+import ch.corner.envres.security.AjaxAuthenticationFailureHandler;
+import ch.corner.envres.security.AjaxAuthenticationSuccessHandler;
+import ch.corner.envres.security.AjaxLogoutSuccessHandler;
+import ch.corner.envres.security.AuthoritiesConstants;
+import ch.corner.envres.security.CustomAccessDeniedHandler;
+import ch.corner.envres.security.Http401UnauthorizedEntryPoint;
 import ch.corner.envres.web.filter.CsrfCookieGeneratorFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
